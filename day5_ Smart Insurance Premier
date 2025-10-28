@@ -1,0 +1,72 @@
+#include <stdio.h>
+
+int main() {
+    int age, health;
+    char gender;
+    float premium = 0.0, discount = 0.0, finalPremium = 0.0;
+
+    // Step 1: Accept inputs
+    printf("Enter age: ");
+    scanf("%d", &age);
+
+    printf("Enter gender (M/F): ");
+    scanf(" %c", &gender); // note the space before %c to handle newline character
+
+    printf("Health condition (1-Healthy / 0-Unhealthy): ");
+    scanf("%d", &health);
+
+    // Step 2: Decision logic for premium calculation
+    if (age < 25) {
+        if (health == 1)
+            premium = 5000;
+        else
+            premium = 0; // Not eligible, unhealthy and below 25 doesn't qualify for any premium
+    }
+    else if (age >= 25 && age <= 40) {
+        if (health == 1)
+            premium = 7000;
+        else
+            premium = 9500;
+    }
+    else if (age >= 41 && age <= 60) {
+        if (health == 1)
+            premium = 10000;
+        else
+            premium = 13000;
+    }
+    else if (age > 60) {
+        if (health == 1)
+            premium = 15000;
+        else {
+            // Unhealthy and above 60 → Not eligible
+            printf("\nCustomer Details:\n");
+            printf("Age: %d\n", age);
+            printf("Gender: %c\n", gender);
+            printf("Health: Unhealthy\n");
+            printf("Status: Not Eligible for Insurance\n");
+            return 0;
+        }
+    }
+
+    // Step 3: Apply 10% discount if gender is Female
+    if (gender == 'F' || gender == 'f') {
+        discount = premium * 0.10;
+    }
+
+    finalPremium = premium - discount;
+
+    // Step 4: Display customer details and final premium
+    printf("\nCustomer Details:\n");
+    printf("Age: %d\n", age);
+    printf("Gender: %c\n", gender);
+    printf("Health: %s\n", (health == 1) ? "Healthy" : "Unhealthy");
+
+    // Check for ineligible cases (e.g., unhealthy below 25)
+    if (premium == 0) {
+        printf("Status: Not Eligible for Insurance\n");
+    } else {
+        printf("Final Premium: ₹%.2f\n", finalPremium);
+    }
+
+return 0;
+}
