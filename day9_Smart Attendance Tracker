@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+int main() {
+    int N;
+    int i = 1;
+    int present;
+    float percentage;
+
+    int eligibleCount = 0;
+    int notEligibleCount = 0;
+    int totalPresent = 0;   // accumulator
+
+    printf("Enter total number of students: ");
+    scanf("%d", &N);
+
+    while (i <= N) {
+        printf("Enter attendance for student %d (out of 30): ", i);
+        scanf("%d", &present);
+
+        percentage = (present / 30.0f) * 100.0f;
+
+        totalPresent += present;   // add to sum
+
+        printf("Student %d: %.2f%% - ", i, percentage);
+
+        if (percentage >= 75.0f) {
+            printf("Eligible\n");
+            eligibleCount++;
+        } else {
+            printf("Not Eligible\n");
+            notEligibleCount++;
+        }
+
+        i++;
+    }
+
+    // Compute class average
+    float classAverage = (totalPresent / (float)(N * 30)) * 100.0f;
+
+    // Summary Report
+    printf("\nClass Summary:\n");
+    printf("Total Students: %d\n", N);
+    printf("Eligible Students: %d\n", eligibleCount);
+    printf("Not Eligible: %d\n", notEligibleCount);
+    printf("Average Attendance: %.2f%%\n", classAverage);
+
+    return 0;
+}
