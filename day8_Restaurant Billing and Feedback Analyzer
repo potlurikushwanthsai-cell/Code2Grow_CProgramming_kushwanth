@@ -1,0 +1,67 @@
+#include <stdio.h>
+
+int main() {
+    int totalCustomers;
+    int customerCount = 1;
+    float totalRevenue = 0.0, highestBill = 0.0, avgFeedback = 0.0;
+
+    printf("Enter number of customers: ");
+    scanf("%d", &totalCustomers);
+
+    // Outer loop for each customer
+    while (customerCount <= totalCustomers) {
+        int numItems, itemCount = 1, feedback;
+        float subtotal = 0.0, gst, finalBill;
+
+        printf("\nCustomer %d:\n", customerCount);
+        printf("Enter number of items: ");
+        scanf("%d", &numItems);
+
+        // Inner loop for items
+        while (itemCount <= numItems) {
+            float price;
+            int quantity;
+
+            printf("Enter price of item %d: ", itemCount);
+            scanf("%f", &price);
+
+            printf("Enter quantity: ");
+            scanf("%d", &quantity);
+
+            subtotal += price * quantity;
+            itemCount++;
+        }
+
+        // Calculate GST and final bill
+        gst = 0.05 * subtotal;
+        finalBill = subtotal + gst;
+
+        printf("Customer %d Bill: %.2f\n", customerCount, finalBill);
+
+        // Update total revenue and highest bill
+        totalRevenue += finalBill;
+        if (finalBill > highestBill)
+            highestBill = finalBill;
+
+        // Feedback validation loop
+        do {
+            printf("Enter feedback (1–5): ");
+            scanf("%d", &feedback);
+            if (feedback < 1 || feedback > 5)
+                printf("Invalid feedback! Please enter a number between 1 and 5.\n");
+        } while (feedback < 1 || feedback > 5);
+
+        avgFeedback += feedback;
+        customerCount++;
+    }
+
+    // Final summary
+    avgFeedback /= totalCustomers;
+
+    printf("\n--- Restaurant Bill Summary ---\n");
+    printf("Total Revenue Today: %.2f\n", totalRevenue);
+    printf("Average Feedback Rating: %.2f\n", avgFeedback);
+    printf("Highest Bill Amount: %.2f\n", highestBill);
+
+    return 0;
+}
