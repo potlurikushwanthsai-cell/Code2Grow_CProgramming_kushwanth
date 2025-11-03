@@ -1,0 +1,98 @@
+#include <stdio.h>
+
+int main() {
+    int totalCustomers, i, j;
+    
+    // Menu details
+    int codes[] = {1, 2, 3, 4, 5};
+    char *names[] = {"Sandwich", "Burger", "Pizza Slice", "Coffee", "Juice"};
+    int prices[] = {80, 120, 150, 60, 50};
+    int menuItems = 5;
+    
+    printf("Enter total number of customers: ");
+    scanf("%d", &totalCustomers);
+    
+    int totalRevenue = 0;
+
+    printf("=========== Smart Canteen Billing System ===========\n");
+
+    for (i = 1; i <= totalCustomers; i++) {
+        int numItems, itemCode, quantity;
+        int customerTotal = 0;
+        
+        printf("--- Customer %d ---\n", i);
+
+        // Display menu
+        printf("Menu:\n");
+        for(j = 0; j < menuItems; j++) {
+            printf("%d. %s - ₹%d\n", codes[j], names[j], prices[j]);
+        }
+
+        printf("Enter number of items: ");
+        scanf("%d", &numItems);
+
+        // Bill details storage for printing
+        int orderedCodes[numItems], orderedQuantities[numItems], orderedPrices[numItems];
+
+        for (j = 0; j < numItems; j++) {
+            printf("Enter item code: ");
+            scanf("%d", &itemCode);
+            printf("Enter quantity: ");
+            scanf("%d", &quantity);
+
+            // Find item price and name using codes
+            int k;
+            int pricePerItem = 0;
+            for (k = 0; k < menuItems; k++) {
+                if (codes[k] == itemCode) {
+                    pricePerItem = prices[k];
+                    break;
+                }
+            }
+
+            int itemTotal = pricePerItem * quantity;
+            customerTotal += itemTotal;
+
+            // Store for printing later
+            orderedCodes[j] = itemCode;
+            orderedQuantities[j] = quantity;
+            orderedPrices[j] = pricePerItem;
+        }
+
+        // Apply discount if applicable
+        float discount = 0;
+        if (customerTotal > 500) {
+            discount = customerTotal * 0.10f;
+        }
+
+        float finalBill = customerTotal - discount;
+        totalRevenue += finalBill;
+
+        // Print individual customer bill
+        printf("Customer %d Bill:\n", i);
+        for (j = 0; j < numItems; j++) {
+            // Find item name for printing
+            int k;
+            for(k = 0; k < menuItems; k++) {
+                if(codes[k] == orderedCodes[j]) {
+                    printf("%s x %d = ₹%d\n", names[k], orderedQuantities[j], orderedPrices[j] * orderedQuantities[j]);
+                    break;
+                }
+            }
+        }
+        printf("Total: ₹%d\n", customerTotal);
+        if (discount > 0) {
+            printf("Discount (10%%): ₹%.0f\n", discount);
+        }
+        printf("Final Bill: ₹%.0f\n", finalBill);
+    }
+
+    // Print canteen summary
+    printf("================== Canteen Summary ==================\n");
+    printf("Total Customers Served: %d\n", totalCustomers);
+    printf("Total Revenue: ₹%d\n", totalRevenue);
+    printf("=====================================================\n");
+
+    return 0;
+}
+
