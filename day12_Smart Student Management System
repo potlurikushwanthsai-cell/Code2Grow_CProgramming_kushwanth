@@ -1,0 +1,83 @@
+#include <stdio.h>
+
+int main() {
+    int n, i = 1, choice;
+    float avg1 = 0, avg2 = 0, avg3 = 0, avg = 0;
+    float m1, m2, m3, total;
+    float classTotal = 0, highest = -1, lowest = 101;
+    int pass = 0, fail = 0;
+
+    printf("Smart Student Result Management\n");
+    printf("Enter number of students (max 3): "students (max 3): ");
+    scanf("%d", &n);
+
+    // Input marks for each student
+    while (i <= n && i <= 3) {
+        printf("--- Student %d ---\n", i);
+        printf("Enter marks for Subject 1: ");
+        scanf("%f", &m1);
+        printf("Enter marks for Subject 2: ");
+        scanf("%f", &m2);
+        printf("Enter marks for Subject 3: ");
+        scanf("%f", &m3);
+
+        total = m1 + m2 + m3;
+        avg = total / 3.0;
+
+        // Store averages based on student number
+        if (i == 1) avg1 = avg;
+        if (i == 2) avg2 = avg;
+        if (i == 3) avg3 = avg;
+
+        // Count pass/fail
+        if (avg >= 50) pass++;
+        else fail++;
+
+        // Highest & lowest
+        if (avg > highest) highest = avg;
+        if (avg < lowest) lowest = avg;
+
+        // Class total
+        classTotal += avg;
+        i++;
+    }
+
+    // Menu loop
+    do {
+        printf("========= Menu =========\n");
+        printf("1. View All Results\n");
+        printf("2. View Class Summary\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        if (choice == 1) {
+            printf("--- Result Sheet ---\n");
+            // Display results for each student
+            for (int j = 1; j <= n; j++) {
+                if (j == 1) avg = avg1;
+                if (j == 2) avg = avg2;
+                if (j == 3) avg = avg3;
+
+                printf("Student %d: Avg = %.1f → Grade ", j, avg);
+                if (avg >= 90) printf("A+\n");
+                else if (avg >= 80) printf("A\n");
+                else if (avg >= 70) printf("B\n");
+                else if (avg >= 60) printf("C\n");
+                else if (avg >= 50) printf("D\n");
+                else printf("Fail\n");
+            }
+        } else if (choice == 2) {
+            printf("--- Class Summary ---\n");
+            printf("Total Students: %d\n", n);
+            printf("Passed: %d\n", pass);
+            printf("Failed: %d\n", fail);
+            printf("Class Average: %.1f\n", classTotal / n);
+            printf("Highest Average: %.1f\n", highest);
+            printf("Lowest Average: %.1f\n", lowest);
+        }
+    } while (choice != 3);
+
+    printf("Thank you! Exiting system...\n");
+    return 0;
+}
