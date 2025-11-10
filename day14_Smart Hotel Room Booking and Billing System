@@ -1,0 +1,103 @@
+#include <stdio.h>
+
+int main() {
+    int total_customers, customer_count = 1;
+    int total_rooms_booked = 0;
+    float total_revenue = 0, highest_bill = 0, lowest_bill = 9999999;
+    
+    printf("=== SMART HOTEL ROOM BOOKING AND BILLING SYSTEM ===\n");
+    printf("Enter total number of customers: ");
+    scanf("%d", &total_customers);
+    
+    while (customer_count <= total_customers) {
+        char name[50];
+        int room_code, days;
+        char bf, wifi, gym;
+        float room_rate = 0, service_cost_per_day = 0;
+        float total_before_gst, discount = 0, total_after_discount, gst, final_bill;
+        
+        printf("\n--- Customer %d Details ---\n", customer_count);
+        printf("Enter customer name: ");
+        scanf("%s", name);
+        
+        printf("\nRoom Types:\n1. Deluxe Room - ₹2500 per night\n2. Super Deluxe - ₹4000 per night\n3. Suite Room - ₹6000 per night\n");
+        printf("Enter room type code (1-3): ");
+        scanf("%d", &room_code);
+        
+        printf("Enter number of days of stay: ");
+        scanf("%d", &days);
+        
+        if (room_code == 1) {
+            room_rate = 2500;
+            printf("Room Type: Deluxe Room\n");
+        } else if (room_code == 2) {
+            room_rate = 4000;
+            printf("Room Type: Super Deluxe\n");
+        } else if (room_code == 3) {
+            room_rate = 6000;
+            printf("Room Type: Suite Room\n");
+        } else {
+            printf("Invalid room code! Defaulting to Deluxe Room.\n");
+            room_rate = 2500;
+        }
+        
+        printf("\nAdd additional services (Y/N):\n");
+        printf("Breakfast (₹300/day): ");
+        scanf(" %c", &bf);
+        printf("Wi-Fi (₹100/day): ");
+        scanf(" %c", &wifi);
+        printf("Gym Access (₹200/day): ");
+        scanf(" %c", &gym);
+        
+        service_cost_per_day = 0;
+        if (bf == 'Y' || bf == 'y')
+            service_cost_per_day += 300;
+        if (wifi == 'Y' || wifi == 'y')
+            service_cost_per_day += 100;
+        if (gym == 'Y' || gym == 'y')
+            service_cost_per_day += 200;
+        
+        total_before_gst = (room_rate + service_cost_per_day) * days;
+        
+        if (total_before_gst > 10000)
+            discount = 0.10 * total_before_gst;
+        
+        total_after_discount = total_before_gst - discount;
+        gst = 0.12 * total_after_discount;
+        final_bill = total_after_discount + gst;
+        
+        // Display individual bill
+        printf("\n----- BILL SUMMARY -----\n");
+        printf("Customer Name: %s\n", name);
+        printf("Room Rate per Night: ₹%.2f\n", room_rate);
+        printf("Additional Services per Day: ₹%.2f\n", service_cost_per_day);
+        printf("Days Stayed: %d\n", days);
+        printf("Subtotal (Before Discount): ₹%.2f\n", total_before_gst);
+        printf("Discount (10%% if > ₹10,000): ₹%.2f\n", discount);
+        printf("Subtotal After Discount: ₹%.2f\n", total_after_discount);
+        printf("GST (12%%): ₹%.2f\n", gst);
+        printf("Total Payable Amount: ₹%.2f\n", final_bill);
+        printf("-------------------------\n");
+        
+        // Update summary
+        total_rooms_booked++;
+        total_revenue += final_bill;
+        
+        if (final_bill > highest_bill)
+            highest_bill = final_bill;
+        if (final_bill < lowest_bill)
+            lowest_bill = final_bill;
+        
+        customer_count++;
+    }
+    
+    // Hotel Summary
+    printf("\n===== HOTEL SUMMARY =====\n");
+    printf("Total Rooms Booked: %d\n", total_rooms_booked);
+    printf("Total Revenue for the Day: ₹%.2f\n", total_revenue);
+    printf("Highest Bill Amount: ₹%.2f\n", highest_bill);
+    printf("Lowest Bill Amount: ₹%.2f\n", lowest_bill);
+    printf("==========================\n");
+    
+    return 0;
+}
