@@ -1,0 +1,79 @@
+#include <stdio.h>
+
+int main() {
+    // Fixed menu data
+    int itemNo[5] = {1, 2, 3, 4, 5};
+    char itemName[5][20] = {"Coffee", "Tea", "Sandwich", "Burger", "Pastry"};
+    int price[5] = {50, 30, 80, 120, 60};
+    
+    // To store total orders and revenue
+    int totalOrdered[5] = {0, 0, 0, 0, 0};
+    int totalRevenue = 0, totalItemsSold = 0;
+    
+    int numCustomers;
+    
+    printf("========== Welcome to the Café ==========\n\n");
+    printf("Menu:\n");
+    printf("------------------------------------------\n");
+    printf("Item No.\tItem Name\tPrice (₹)\n");
+    printf("------------------------------------------\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d\t\t%s\t\t%d\n", itemNo[i], itemName[i], price[i]);
+    }
+    printf("------------------------------------------\n\n");
+
+    // Get number of customers
+    printf("Enter number of customers (max 10): ");
+    scanf("%d", &numCustomers);
+
+    if (numCustomers < 1 || numCustomers > 10) {
+        printf("Invalid number of customers! Program exiting.\n");
+        return 0;
+    }
+
+    // Process orders for each customer
+    for (int c = 1; c <= numCustomers; c++) {
+        int numItems, item, qty, customerTotal = 0;
+        printf("\n--- Customer %d ---\n", c);
+        printf("Enter number of items to order: ");
+        scanf("%d", &numItems);
+
+        for (int i = 0; i < numItems; i++) {
+            printf("Enter item number (1-5): ");
+            scanf("%d", &item);
+            if (item < 1 || item > 5) {
+                printf("Invalid item number! Skipping...\n");
+                continue;
+            }
+            printf("Enter quantity: ");
+            scanf("%d", &qty);
+
+            // Update totals
+            customerTotal += price[item - 1] * qty;
+            totalOrdered[item - 1] += qty;
+            totalItemsSold += qty;
+        }
+
+        printf("Total bill for Customer %d: ₹%d\n", c, customerTotal);
+        totalRevenue += customerTotal;
+    }
+
+    // Find most and least ordered items
+    int mostOrderedIndex = 0, leastOrderedIndex = 0;
+    for (int i = 1; i < 5; i++) {
+        if (totalOrdered[i] > totalOrdered[mostOrderedIndex])
+            mostOrderedIndex = i;
+        if (totalOrdered[i] < totalOrdered[leastOrderedIndex])
+            leastOrderedIndex = i;
+    }
+
+    // Summary
+    printf("\n========== Café Summary ==========\n");
+    printf("Total Revenue: ₹%d\n", totalRevenue);
+    printf("Total Items Sold: %d\n", totalItemsSold);
+    printf("Most Ordered Item: %s (%d sold)\n", itemName[mostOrderedIndex], totalOrdered[mostOrderedIndex]);
+    printf("Least Ordered Item: %s (%d sold)\n", itemName[leastOrderedIndex], totalOrdered[leastOrderedIndex]);
+    printf("==================================\n");
+
+    return 0;
+}
