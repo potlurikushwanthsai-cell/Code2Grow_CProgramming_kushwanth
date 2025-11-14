@@ -1,0 +1,131 @@
+#include <stdio.h>
+
+int main() {
+
+    int productID[10];
+    int quantity[10];
+    float price[10];
+    char name[10][50];
+
+    int count = 0;
+    int choice;
+
+    while (1) {
+        printf("\n===== MENU =====\n");
+        printf("1. Input Product\n");
+        printf("2. Display All Products\n");
+        printf("3. Inventory Report\n");
+        printf("4. Search by ID\n");
+        printf("5. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        /* 1. Add Product */
+        if (choice == 1) {
+            if (count == 10) {
+                printf("Cannot add more products (limit reached).\n");
+            } else {
+                printf("Enter Product ID: ");
+                scanf("%d", &productID[count]);
+
+                printf("Enter Product Name: ");
+                scanf(" %[^\n]", name[count]);
+
+                printf("Enter Quantity: ");
+                scanf("%d", &quantity[count]);
+
+                printf("Enter Price: ");
+                scanf("%f", &price[count]);
+
+                count++;
+                printf("Product added successfully!\n");
+            }
+        }
+
+        /* 2. Display All Products */
+        else if (choice == 2) {
+            if (count == 0) {
+                printf("No products available.\n");
+            } else {
+                printf("\n--- Product List ---\n");
+                for (int i = 0; i < count; i++) {
+                    printf("ID: %d | Name: %s | Qty: %d | Price: %.2f\n",
+                           productID[i], name[i], quantity[i], price[i]);
+                }
+            }
+        }
+
+        /* 3. Inventory Calculations */
+        else if (choice == 3) {
+            if (count == 0) {
+                printf("No products available.\n");
+            } else {
+                float total = 0;
+                float maxValue = quantity[0] * price[0];
+                float minValue = quantity[0] * price[0];
+                int maxIndex = 0, minIndex = 0;
+
+                for (int i = 0; i < count; i++) {
+                    float value = quantity[i] * price[i];
+                    total += value;
+
+                    if (value > maxValue) {
+                        maxValue = value;
+                        maxIndex = i;
+                    }
+
+                    if (value < minValue) {
+                        minValue = value;
+                        minIndex = i;
+                    }
+                }
+
+                printf("Total Inventory Value = %.2f\n", total);
+                printf("Highest Value Product: ID=%d, Name=%s, Value=%.2f\n",
+                       productID[maxIndex], name[maxIndex], maxValue);
+                printf("Lowest  Value Product: ID=%d, Name=%s, Value=%.2f\n",
+                       productID[minIndex], name[minIndex], minValue);
+            }
+        }
+
+        /* 4. Search Product by ID */
+        else if (choice == 4) {
+            if (count == 0) {
+                printf("No products to search.\n");
+            } else {
+                int searchID;
+                int found = 0;
+
+                printf("Enter ID to search: ");
+                scanf("%d", &searchID);
+
+                for (int i = 0; i < count; i++) {
+                    if (productID[i] == searchID) {
+                        found = 1;
+                        printf("Product Found!\n");
+                        printf("ID: %d | Name: %s | Qty: %d | Price: %.2f\n",
+                               productID[i], name[i], quantity[i], price[i]);
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    printf("Product not found.\n");
+                }
+            }
+        }
+
+        /* Exit */
+        else if (choice == 5) {
+            printf("Exiting...\n");
+            break;
+        }
+
+        /* Invalid Option */
+        else {
+            printf("Invalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
