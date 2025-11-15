@@ -1,0 +1,197 @@
+#include <stdio.h>
+
+int main() {
+
+    int attendance[5][5];
+    int marks[5][5];
+    char names[5][20];
+
+    int i, j;
+
+    // =============================
+    // INPUT PHASE
+    // =============================
+
+    printf("Enter names of 5 students:\n");
+    for(i = 0; i < 5; i++) {
+        printf("Student %d: ", i + 1);
+        scanf("%s", names[i]);
+    }
+
+    printf("\nEnter Attendance (1 = Present, 0 = Absent):\n");
+    for(i = 0; i < 5; i++) {
+        printf("Attendance for %s:\n", names[i]);
+        for(j = 0; j < 5; j++) {
+            scanf("%d", &attendance[i][j]);
+        }
+    }
+
+    printf("\nEnter Marks (0–100):\n");
+    for(i = 0; i < 5; i++) {
+        printf("Marks for %s:\n", names[i]);
+        for(j = 0; j < 5; j++) {
+            scanf("%d", &marks[i][j]);
+        }
+    }
+
+    // =============================
+    // PROCESSING VARIABLES
+    // =============================
+
+    int totalAttendance[5], totalAbsence[5];
+    int totalMarks[5];
+    float avgMarks[5];
+
+    int highestAttendance = -1, highestIndex = 0;
+    int lowestAttendance = 999, lowestIndex = 0;
+
+    int highestMarks = -1, topper = 0;
+    int lowestMarks = 999, lowPerformer = 0;
+
+    // =============================
+    // ATTENDANCE PROCESSING
+    // =============================
+
+    for(i = 0; i < 5; i++) {
+        totalAttendance[i] = 0;
+        totalAbsence[i] = 0;
+
+        for(j = 0; j < 5; j++) {
+            if(attendance[i][j] == 1)
+                totalAttendance[i]++;
+            else
+                totalAbsence[i]++;
+        }
+
+        if(totalAttendance[i] > highestAttendance) {
+            highestAttendance = totalAttendance[i];
+            highestIndex = i;
+        }
+
+        if(totalAttendance[i] < lowestAttendance) {
+            lowestAttendance = totalAttendance[i];
+            lowestIndex = i;
+        }
+    }
+
+    // =============================
+    // MARKS PROCESSING
+    // =============================
+
+    for(i = 0; i < 5; i++) {
+        totalMarks[i] = 0;
+
+        for(j = 0; j < 5; j++) {
+            totalMarks[i] += marks[i][j];
+        }
+
+        avgMarks[i] = totalMarks[i] / 5.0;
+
+        if(totalMarks[i] > highestMarks) {
+            highestMarks = totalMarks[i];
+            topper = i;
+        }
+
+        if(totalMarks[i] < lowestMarks) {
+            lowestMarks = totalMarks[i];
+            lowPerformer = i;
+        }
+    }
+
+    // =============================
+    // MENU SYSTEM
+    // =============================
+
+    int choice;
+
+    do {
+        printf("\n========= MENU =========\n");
+        printf("1. Display Attendance Matrix\n");
+        printf("2. Display Marks Matrix\n");
+        printf("3. Attendance Report\n");
+        printf("4. Performance Report\n");
+        printf("5. Grade Report\n");
+        printf("6. Exit\n");
+        printf("========================\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+
+            case 1:
+                printf("\nATTENDANCE MATRIX:\n");
+                for(i = 0; i < 5; i++) {
+                    printf("%s: ", names[i]);
+                    for(j = 0; j < 5; j++) {
+                        printf("%d ", attendance[i][j]);
+                    }
+                    printf("\n");
+                }
+                break;
+
+            case 2:
+                printf("\nMARKS MATRIX:\n");
+                for(i = 0; i < 5; i++) {
+                    printf("%s: ", names[i]);
+                    for(j = 0; j < 5; j++) {
+                        printf("%d ", marks[i][j]);
+                    }
+                    printf("\n");
+                }
+                break;
+
+            case 3:
+                printf("\nATTENDANCE REPORT:\n");
+                for(i = 0; i < 5; i++) {
+                    printf("%s → Present: %d, Absent: %d\n",
+                           names[i], totalAttendance[i], totalAbsence[i]);
+                }
+                printf("\nHighest Attendance: %s (%d)\n",
+                        names[highestIndex], highestAttendance);
+                printf("Lowest Attendance: %s (%d)\n",
+                        names[lowestIndex], lowestAttendance);
+                break;
+
+            case 4:
+                printf("\nPERFORMANCE REPORT:\n");
+                for(i = 0; i < 5; i++) {
+                    printf("%s → Total Marks: %d | Average: %.2f\n",
+                           names[i], totalMarks[i], avgMarks[i]);
+                }
+                printf("\nClass Topper: %s (%d marks)\n",
+                        names[topper], highestMarks);
+                printf("Lowest Performer: %s (%d marks)\n",
+                        names[lowPerformer], lowestMarks);
+                break;
+
+            case 5:
+                printf("\nGRADE REPORT:\n");
+                for(i = 0; i < 5; i++) {
+                    char grade;
+
+                    if(avgMarks[i] >= 90) {
+                        printf("%s → Average: %.2f → Grade: A+\n", names[i], avgMarks[i]);
+                        continue;
+                    }
+                    else if(avgMarks[i] >= 80) grade = 'A';
+                    else if(avgMarks[i] >= 70) grade = 'B';
+                    else if(avgMarks[i] >= 60) grade = 'C';
+                    else if(avgMarks[i] >= 50) grade = 'D';
+                    else grade = 'F';
+
+                    printf("%s → Average: %.2f → Grade: %c\n", names[i], avgMarks[i], grade);
+                }
+                break;
+
+            case 6:
+                printf("\nExiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+
+    } while(choice != 6);
+
+    return 0;
+}
