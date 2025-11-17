@@ -1,0 +1,213 @@
+# -----------------------------------------------------
+# WAREHOUSE MANAGEMENT SYSTEM (Version 2)
+# Using Lists + Functions (Different Code Structure)
+# -----------------------------------------------------
+
+MAX_PRODUCTS = 20
+
+# Product structure stored in parallel lists
+product_ids = []
+quantities = []
+prices = []
+
+# 3x3 Rack Matrix
+rack = [
+    [4, 7, 2],
+    [6, 1, 8],
+    [3, 9, 5]
+]
+
+# -----------------------------------------------------
+# 1. Add Product
+# -----------------------------------------------------
+def add_product():
+    if len(product_ids) >= MAX_PRODUCTS:
+        print("❌ Maximum product limit reached!")
+        return
+    
+    pid = int(input("Enter Product ID: "))
+
+    if pid in product_ids:
+        print("❌ Product ID already exists!")
+        return
+
+    qty = int(input("Enter Quantity: "))
+    price = float(input("Enter Price: "))
+
+    if qty <= 0 or price <= 0:
+        print("❌ Quantity & Price must be positive!")
+        return
+
+    product_ids.append(pid)
+    quantities.append(qty)
+    prices.append(price)
+    print("✅ Product added successfully!")
+
+
+# -----------------------------------------------------
+# 2. Search Product
+# -----------------------------------------------------
+def search_product():
+    pid = int(input("Enter Product ID to search: "))
+
+    if pid in product_ids:
+        index = product_ids.index(pid)
+        print("\nProduct Found!")
+        print(f"ID: {product_ids[index]}")
+        print(f"Quantity: {quantities[index]}")
+        print(f"Price: {prices[index]}")
+    else:
+        print("❌ Product Not Found")
+
+
+# -----------------------------------------------------
+# 3. Update Quantity
+# -----------------------------------------------------
+def update_quantity():
+    pid = int(input("Enter Product ID: "))
+
+    if pid not in product_ids:
+        print("❌ Product Not Found")
+        return
+    
+    index = product_ids.index(pid)
+
+    print("1. Increase Quantity")
+    print("2. Decrease Quantity")
+    ch = int(input("Enter choice: "))
+
+    if ch == 1:
+        amt = int(input("Enter amount to increase: "))
+        quantities[index] += amt
+        print("✅ Quantity Updated!")
+    elif ch == 2:
+        amt = int(input("Enter amount to decrease: "))
+        if quantities[index] - amt < 0:
+            print("❌ Quantity cannot be negative!")
+        else:
+            quantities[index] -= amt
+            print("✅ Quantity Updated!")
+    else:
+        print("❌ Invalid choice!")
+
+
+# -----------------------------------------------------
+# 4. Rack Report
+# -----------------------------------------------------
+def rack_report():
+    max_val = rack[0][0]
+    min_val = rack[0][0]
+    max_pos = (0, 0)
+    min_pos = (0, 0)
+    total = 0
+
+    for i in range(3):
+        for j in range(3):
+            val = rack[i][j]
+            total += val
+
+            if val > max_val:
+                max_val = val
+                max_pos = (i, j)
+            if val < min_val:
+                min_val = val
+                min_pos = (i, j)
+
+    print("\n📦 Rack Report")
+    print(f"Maximum Stock = {max_val} at position {max_pos}")
+    print(f"Minimum Stock = {min_val} at position {min_pos}")
+    print(f"Total Rack Stock = {total}")
+
+
+# -----------------------------------------------------
+# 5. Stock Value Report
+# -----------------------------------------------------
+def stock_value_report():
+    if len(product_ids) == 0:
+        print("❌ No products available!")
+        return
+
+    print("\nID   Quantity   Price   StockValue")
+    print("---------------------------------------")
+
+    total_value = 0
+    max_value = None
+    min_value = None
+    max_index = 0
+    min_index = 0
+
+    for i in range(len(product_ids)):
+        value = quantities[i] * prices[i]
+        total_value += value
+
+        print(f"{product_ids[i]}     {quantities[i]}        {prices[i]}      {value}")
+
+        if max_value is None or value > max_value:
+            max_value = value
+            max_index = i
+
+        if min_value is None or value < min_value:
+            min_value = value
+            min_index = i
+
+    print("\n🔼 Highest Stock Value Product:")
+    print(f"ID: {product_ids[max_index]}  Value: {max_value}")
+
+    print("\n🔽 Lowest Stock Value Product:")
+    print(f"ID: {product_ids[min_index]}  Value: {min_value}")
+
+    print(f"\n🏭 Total Warehouse Value = {total_value}")
+
+
+# -----------------------------------------------------
+# 6. Display All Products
+# -----------------------------------------------------
+def display_products():
+    if not product_ids:
+        print("❌ No products to display")
+        return
+
+    print("\nID   Quantity   Price   StockValue")
+    print("----------------------------------------")
+
+    for i in range(len(product_ids)):
+        value = quantities[i] * prices[i]
+        print(f"{product_ids[i]}     {quantities[i]}        {prices[i]}      {value}")
+
+
+# -----------------------------------------------------
+# MENU SYSTEM
+# -----------------------------------------------------
+def main():
+    while True:
+        print("\n========= WAREHOUSE MENU =========")
+        print("1. Add Product")
+        print("2. Search Product")
+        print("3. Update Quantity")
+        print("4. Rack Report")
+        print("5. Stock Value Report")
+        print("6. Display All Products")
+        print("7. Exit")
+
+        ch = int(input("Enter choice: "))
+
+        if ch == 1:
+            add_product()
+        elif ch == 2:
+            search_product()
+        elif ch == 3:
+            update_quantity()
+        elif ch == 4:
+            rack_report()
+        elif ch == 5:
+            stock_value_report()
+        elif ch == 6:
+            display_products()
+        elif ch == 7:
+            print("👋 Exiting program...")
+            break
+        else:
+            print("❌ Invalid choice!")
+
+
+main()
